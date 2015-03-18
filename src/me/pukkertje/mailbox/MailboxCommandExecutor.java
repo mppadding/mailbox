@@ -32,6 +32,7 @@ public class MailboxCommandExecutor implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("mailbox")) {
             FileConfiguration config = mailbox.getConfig();
+            boolean perms = mailbox.perms != null;
 
             if (!(sender instanceof Player)) {
                 sender.sendMessage("This command can only be run by a player!");
@@ -46,7 +47,7 @@ public class MailboxCommandExecutor implements CommandExecutor {
                 }
                 if(args.length == 1) {
                     if(args[0].equalsIgnoreCase("fees")) {
-                        if(!mailbox.perms.has(player, "mailbox.fees")) {
+                        if(perms && !mailbox.perms.has(player, "mailbox.fees")) {
                             player.sendMessage("You don't have permission to do that!");
                             return true;
                         }
@@ -65,15 +66,16 @@ public class MailboxCommandExecutor implements CommandExecutor {
                         player.sendMessage("/mailbox send <player> sends item in hand to <player>'s mailbox, charges may apply");
                     }
                 } else if(args.length == 2) {
+                    boolean econ = mailbox.econ != null;
                     if(args[0].equalsIgnoreCase("send")) {
-                        if(!mailbox.perms.has(player, "mailbox.send")) {
+                        if(perms && !mailbox.perms.has(player, "mailbox.send")) {
                             player.sendMessage("You don't have permission to do that!");
                             return true;
                         }
 
                         int cost = config.getInt("economy.send");
                         if(cost != 0) {
-                            if(!mailbox.econ.has(player, cost)) {
+                            if(econ && !mailbox.econ.has(player, cost)) {
                                 player.sendMessage("You don't have enough money to do this, you need atleast " + cost);
                                 return true;
                             }
@@ -130,14 +132,14 @@ public class MailboxCommandExecutor implements CommandExecutor {
                             return true;
                         }
                     } else if(args[0].equalsIgnoreCase("create")) {
-                        if(!mailbox.perms.has(player, "mailbox.create")) {
+                        if(perms && !mailbox.perms.has(player, "mailbox.create")) {
                             player.sendMessage("You don't have permission to do that!");
                             return true;
                         }
 
                         int cost = config.getInt("economy.create");
                         if(cost != 0) {
-                            if(!mailbox.econ.has(player, cost)) {
+                            if(econ && !mailbox.econ.has(player, cost)) {
                                 player.sendMessage("You don't have enough money to do this, you need atleast " + cost);
                                 return true;
                             }

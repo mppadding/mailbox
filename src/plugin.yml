@@ -2,7 +2,7 @@ name: Mailbox
 version: 0.0.1
 author: pukkertje
 main: me.pukkertje.mailbox.Mailbox
-depend: [Vault]
+softdepend: [Vault]
 commands:
    mailbox:
       description: /mailbox for more help
